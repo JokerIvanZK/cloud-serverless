@@ -1,0 +1,19 @@
+server:
+  port: 9000
+
+service:
+  # 条件依赖 {mirai.enabled=true, discord.enabled=true}
+  discord-forward: false
+
+mirai:
+  enable: true
+  admin:
+  qq:
+  password:
+  device-info-path: device.json
+  friends:
+  groups:
+
+discord:
+  enable: false
+  token:
