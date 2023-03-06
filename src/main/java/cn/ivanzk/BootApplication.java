@@ -1,4 +1,4 @@
-package com.example.demo;
+package cn.ivanzk;
 
 
 import org.springframework.boot.SpringApplication;

@@ -1,4 +1,4 @@
-package com.example.demo.config.discord;
+package cn.ivanzk.config.discord;
 
 import discord4j.core.DiscordClient;
 import discord4j.core.GatewayDiscordClient;

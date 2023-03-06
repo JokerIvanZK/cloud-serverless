@@ -1,4 +1,4 @@
-package com.example.demo.server;
+package cn.ivanzk.server;
 
 /**
  * @author zk

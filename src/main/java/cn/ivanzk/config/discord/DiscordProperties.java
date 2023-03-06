@@ -1,4 +1,4 @@
-package com.example.demo.config.discord;
+package cn.ivanzk.config.discord;
 
 /**
  * @author zk

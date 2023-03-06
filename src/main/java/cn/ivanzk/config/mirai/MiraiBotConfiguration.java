@@ -1,4 +1,4 @@
-package com.example.demo.config.mirai;
+package cn.ivanzk.config.mirai;
 
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.BotFactory;

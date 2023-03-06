@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package cn.ivanzk.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

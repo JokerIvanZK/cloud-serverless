@@ -1,4 +1,4 @@
-package com.example.demo.config.mirai;
+package cn.ivanzk.config.mirai;
 
 import org.springframework.util.ResourceUtils;
 

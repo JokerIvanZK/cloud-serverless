@@ -1,2 +1,2 @@
 # cloud-serverless
-微服务基本框架
+qq机器人、discord机器人、webapi集成服务

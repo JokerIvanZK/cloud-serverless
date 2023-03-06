@@ -1,4 +1,4 @@
-package com.example.demo.config.mirai;
+package cn.ivanzk.config.mirai;
 
 import net.mamoe.mirai.Bot;
 import org.springframework.beans.factory.annotation.Autowired;

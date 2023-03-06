@@ -8,14 +8,14 @@
         <version>2.6.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
-    <artifactId>demo</artifactId>
+    <groupId>cn.ivanzk</groupId>
+    <artifactId>cloud-serverless</artifactId>
     <version>1.0</version>
-    <name>demo</name>
-    <description>Demo project for Spring Boot</description>
+    <name>cloud-serverless</name>
+    <description>qq机器人、discord机器人、webapi集成服务</description>
     <properties>
         <java.version>1.8</java.version>
-        <start-class>com.example.demo.DemoApplication</start-class>
+        <start-class>cn.ivanzk.BootApplication</start-class>
     </properties>
 
     <dependencies>

@@ -1,6 +1,6 @@
-package com.example.demo.common;
+package cn.ivanzk.common;
 
-import com.example.demo.server.BasicService;
+import cn.ivanzk.server.BasicService;
 import com.java.comn.util.SmallTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;

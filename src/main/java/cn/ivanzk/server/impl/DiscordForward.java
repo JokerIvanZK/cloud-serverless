@@ -1,7 +1,7 @@
-package com.example.demo.server.impl;
+package cn.ivanzk.server.impl;
 
-import com.example.demo.config.mirai.MiraiBot;
-import com.example.demo.server.BasicService;
+import cn.ivanzk.config.mirai.MiraiBot;
+import cn.ivanzk.server.BasicService;
 import com.java.comn.util.DigitStyle;
 import com.java.comn.util.SmallTool;
 import discord4j.core.GatewayDiscordClient;
