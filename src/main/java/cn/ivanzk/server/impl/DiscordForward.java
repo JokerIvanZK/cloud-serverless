@@ -9,7 +9,7 @@ import discord4j.core.event.domain.lifecycle.ReadyEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
  */
 @Component
 @ConditionalOnProperty(name = "service.discord-forward", havingValue = "true")
-@ConditionalOnBean({MiraiBot.class, GatewayDiscordClient.class})
+@AutoConfigureAfter({MiraiBot.class, GatewayDiscordClient.class})
 public class DiscordForward implements BasicService {
     @Autowired
     private MiraiBot miraiBot;

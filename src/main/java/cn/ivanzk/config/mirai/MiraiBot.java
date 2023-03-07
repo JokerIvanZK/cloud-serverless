@@ -2,14 +2,14 @@ package cn.ivanzk.config.mirai;
 
 import net.mamoe.mirai.Bot;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.stereotype.Component;
 
 /**
  * @author zk
  */
 @Component
-@ConditionalOnBean(Bot.class)
+@AutoConfigureAfter(MiraiBotConfiguration.class)
 public class MiraiBot {
     @Autowired
     private Bot bot;
