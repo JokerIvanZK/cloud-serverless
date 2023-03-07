@@ -23,6 +23,7 @@ public class MiraiBotCronJob {
     @Scheduled(cron = "0 0 17 * * ?")
     public void HeartBeat() {
         try {
+            miraiBot.isOnline();
             miraiBot.sendMessage("心跳");
         } catch (Exception e) {
             System.err.println("心跳任务失败，原因：" + e.getMessage());

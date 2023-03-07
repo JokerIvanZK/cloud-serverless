@@ -40,4 +40,14 @@ public class MiraiBot {
             bot.getGroup(aLong).sendMessage(message);
         }
     }
+
+    /**
+     * 是否在线
+     */
+    public void isOnline() {
+        if(!bot.isOnline()){
+            bot.close();
+            bot.login();
+        }
+    }
 }
