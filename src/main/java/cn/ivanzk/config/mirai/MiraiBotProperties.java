@@ -1,9 +1,5 @@
 package cn.ivanzk.config.mirai;
 
-import org.springframework.util.ResourceUtils;
-
-import java.io.File;
-
 /**
  * @author zk
  */
@@ -32,18 +28,7 @@ public class MiraiBotProperties {
     }
 
     public String getDeviceInfoPath() {
-        try {
-            String classpath = ResourceUtils.getURL("classpath:").getPath();
-            this.deviceInfoPath = classpath + this.deviceInfoPath;
-            File file = new File(this.deviceInfoPath);
-            if (!file.exists()) {
-                file.mkdir();
-            }
-            return this.deviceInfoPath;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return deviceInfoPath;
+        return this.deviceInfoPath;
     }
 
     public void setDeviceInfoPath(String deviceInfoPath) {

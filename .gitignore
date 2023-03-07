@@ -1,4 +1,7 @@
 /.idea/
+/cache/
+/out/
 /target/
+/logs/
 /*.iml
 /src/main/resources/application-prod.yml
