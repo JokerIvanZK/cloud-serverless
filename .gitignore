@@ -3,5 +3,6 @@
 /out/
 /target/
 /logs/
-/*.iml
 /src/main/resources/application-prod.yml
+/*.iml
+/device.json
