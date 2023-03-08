@@ -1,6 +1,7 @@
 /.idea/
 /cache/
 /out/
+/META-INF/
 /target/
 /logs/
 /src/main/resources/application-prod.yml
