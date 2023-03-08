@@ -15,7 +15,7 @@ import java.util.Map;
 @RestController()
 @RequestMapping("/")
 public class IndexController {
-    @Autowired
+    @Autowired(required = false)
     private Bot bot;
 
     @GetMapping(value = "/ping")

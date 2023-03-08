@@ -10,9 +10,14 @@ mirai:
   admin:
   qq:
   password:
-  device-info-path: device.json
   friends:
   groups:
+  device-info-path: device.json
+#  protocol: ANDROID_PHONE
+#  protocol: ANDROID_PAD
+  protocol: ANDROID_WATCH
+#  protocol: IPAD
+#  protocol: MACOS
 
 discord:
   enable: false

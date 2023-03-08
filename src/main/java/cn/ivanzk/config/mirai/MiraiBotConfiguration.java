@@ -27,11 +27,11 @@ public class MiraiBotConfiguration {
     @Bean
     public Bot bot(MiraiBotProperties miraiBotProperties) {
         Bot bot = BotFactory.INSTANCE.newBot(miraiBotProperties.getQq(), miraiBotProperties.getPassword(), new BotConfiguration() {{
-            fileBasedDeviceInfo(miraiBotProperties.getDeviceInfoPath());
-            setProtocol(MiraiProtocol.ANDROID_WATCH);
             autoReconnectOnForceOffline();
             noNetworkLog();
             redirectBotLogToFile(new File("logs/bot.log"));
+            fileBasedDeviceInfo(miraiBotProperties.getDeviceInfoPath());
+            setProtocol(miraiBotProperties.getProtocol());
         }});
         bot.login();
         if (bot.isOnline()) {
