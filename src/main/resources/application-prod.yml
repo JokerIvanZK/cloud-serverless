@@ -13,11 +13,8 @@ mirai:
   friends:
   groups:
   device-info-path: device.json
-  #  protocol: ANDROID_PHONE
-  #  protocol: ANDROID_PAD
+  #  protocol: ANDROID_PHONE ANDROID_PAD ANDROID_WATCH IPAD MACOS
   protocol: ANDROID_WATCH
-#  protocol: IPAD
-#  protocol: MACOS
 
 discord:
   enable: false
