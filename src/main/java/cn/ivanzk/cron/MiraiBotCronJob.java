@@ -21,7 +21,7 @@ public class MiraiBotCronJob {
      * 每天17点执行
      */
     @Scheduled(cron = "0 0 17 * * ?")
-    public void HeartBeat() {
+    public void heartBeat() {
         try {
             miraiBot.isOnline();
             miraiBot.sendMessage("心跳");
