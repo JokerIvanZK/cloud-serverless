@@ -8,8 +8,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.io.File;
-
 /**
  * QQ机器人配置
  *
@@ -29,7 +27,6 @@ public class MiraiBotConfiguration {
         Bot bot = BotFactory.INSTANCE.newBot(miraiBotProperties.getQq(), miraiBotProperties.getPassword(), new BotConfiguration() {{
             autoReconnectOnForceOffline();
             noNetworkLog();
-            redirectBotLogToFile(new File("logs/bot.log"));
             fileBasedDeviceInfo(miraiBotProperties.getDeviceInfoPath());
             setProtocol(miraiBotProperties.getProtocol());
         }});
