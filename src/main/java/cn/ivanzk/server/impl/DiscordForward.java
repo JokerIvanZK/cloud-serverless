@@ -1,12 +1,17 @@
 package cn.ivanzk.server.impl;
 
 import cn.ivanzk.config.discord.DiscordForwardProperties;
+import cn.ivanzk.config.kook.KookClient;
 import cn.ivanzk.config.mirai.MiraiBot;
 import cn.ivanzk.server.BasicService;
 import com.java.comn.util.DigitStyle;
 import com.java.comn.util.SmallTool;
 import discord4j.core.GatewayDiscordClient;
+import discord4j.core.event.domain.lifecycle.ReadyEvent;
+import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.object.entity.Message;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +26,7 @@ import java.util.regex.Pattern;
  */
 @Component
 @ConditionalOnProperty(name = "service.discord-forward.enable", havingValue = "true")
-//@ConditionalOnBean(GatewayDiscordClient.class)
+@ConditionalOnBean(GatewayDiscordClient.class)
 public class DiscordForward implements BasicService {
     @Autowired
     private DiscordForwardProperties discordForwardProperties;
@@ -29,20 +34,33 @@ public class DiscordForward implements BasicService {
     private GatewayDiscordClient gatewayDiscordClient;
     @Autowired(required = false)
     private MiraiBot miraiBot;
+    @Autowired(required = false)
+    private KookClient kookClient;
+
 
     @Override
     public void start() {
-        System.out.println(discordForwardProperties.kook);
-//        try {
-//            gatewayDiscordClient.on(ReadyEvent.class).subscribe(event -> miraiBot.noticeAdmin(String.format("discord:<%s>上线", event.getSelf().getUsername())));
-//            gatewayDiscordClient.on(MessageCreateEvent.class).subscribe(event -> {
-//                final Message message = event.getMessage();
-//                miraiBot.sendMessage(TimestampUtil.matcherTimeStamp(message.getContent()));
-//            });
-//            gatewayDiscordClient.onDisconnect().block();
-//        } catch (Exception e) {
-//            System.err.println(e.getMessage());
-//        }
+        kookClient.sendMessage("测试");
+        try {
+            gatewayDiscordClient.on(ReadyEvent.class).subscribe(event -> {
+                if (discordForwardProperties.mirai) {
+                    miraiBot.noticeAdmin(String.format("discord:<%s>上线", event.getSelf().getUsername()));
+                } else if(discordForwardProperties.kook) {
+                    kookClient.sendMessage(String.format("discord:<%s>上线", event.getSelf().getUsername()));
+                }
+            });
+            gatewayDiscordClient.on(MessageCreateEvent.class).subscribe(event -> {
+                final Message message = event.getMessage();
+                if (discordForwardProperties.mirai) {
+                    miraiBot.sendMessage(TimestampUtil.matcherTimeStamp(message.getContent()));
+                } else if(discordForwardProperties.kook) {
+                    kookClient.sendMessage(TimestampUtil.matcherTimeStamp(message.getContent()));
+                }
+            });
+            gatewayDiscordClient.onDisconnect().block();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
 
 

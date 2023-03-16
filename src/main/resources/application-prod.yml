@@ -13,6 +13,15 @@ discord:
   enable: false
   token:
 
+kook:
+  enable: true
+  token:
+  base-url: https://www.kookapp.cn/
+  guild-list: /api/v3/guild/list
+  channel-list: /api/v3/channel/list
+  channel-message: /api/v3/channel/message
+
+
 mirai:
   enable: false
   admin:
