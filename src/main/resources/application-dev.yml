@@ -2,11 +2,19 @@ server:
   port: 9000
 
 service:
-  # 条件依赖 {mirai.enabled=true, discord.enabled=true}
-  discord-forward: false
+  discord-forward:
+    enable: true
+    forward:
+      mirai: false
+      kook: true
+
+
+discord:
+  enable: false
+  token:
 
 mirai:
-  enable: true
+  enable: false
   admin:
   qq:
   password:
@@ -15,7 +23,3 @@ mirai:
   device-info-path: device.json
   #  protocol: ANDROID_PHONE ANDROID_PAD ANDROID_WATCH IPAD MACOS
   protocol: MACOS
-
-discord:
-  enable: false
-  token:

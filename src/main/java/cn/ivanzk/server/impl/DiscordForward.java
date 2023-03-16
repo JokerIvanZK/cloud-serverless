@@ -1,15 +1,12 @@
 package cn.ivanzk.server.impl;
 
+import cn.ivanzk.config.discord.DiscordForwardProperties;
 import cn.ivanzk.config.mirai.MiraiBot;
 import cn.ivanzk.server.BasicService;
 import com.java.comn.util.DigitStyle;
 import com.java.comn.util.SmallTool;
 import discord4j.core.GatewayDiscordClient;
-import discord4j.core.event.domain.lifecycle.ReadyEvent;
-import discord4j.core.event.domain.message.MessageCreateEvent;
-import discord4j.core.object.entity.Message;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
@@ -23,27 +20,31 @@ import java.util.regex.Pattern;
  * @author zk
  */
 @Component
-@ConditionalOnProperty(name = "service.discord-forward", havingValue = "true")
-@AutoConfigureAfter({MiraiBot.class, GatewayDiscordClient.class})
+@ConditionalOnProperty(name = "service.discord-forward.enable", havingValue = "true")
+//@ConditionalOnBean(GatewayDiscordClient.class)
 public class DiscordForward implements BasicService {
     @Autowired
-    private MiraiBot miraiBot;
+    private DiscordForwardProperties discordForwardProperties;
     @Autowired
     private GatewayDiscordClient gatewayDiscordClient;
+    @Autowired(required = false)
+    private MiraiBot miraiBot;
 
     @Override
     public void start() {
-        try {
-            gatewayDiscordClient.on(ReadyEvent.class).subscribe(event -> miraiBot.noticeAdmin(String.format("discord:<%s>上线", event.getSelf().getUsername())));
-            gatewayDiscordClient.on(MessageCreateEvent.class).subscribe(event -> {
-                final Message message = event.getMessage();
-                miraiBot.sendMessage(TimestampUtil.matcherTimeStamp(message.getContent()));
-            });
-            gatewayDiscordClient.onDisconnect().block();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
+        System.out.println(discordForwardProperties.kook);
+//        try {
+//            gatewayDiscordClient.on(ReadyEvent.class).subscribe(event -> miraiBot.noticeAdmin(String.format("discord:<%s>上线", event.getSelf().getUsername())));
+//            gatewayDiscordClient.on(MessageCreateEvent.class).subscribe(event -> {
+//                final Message message = event.getMessage();
+//                miraiBot.sendMessage(TimestampUtil.matcherTimeStamp(message.getContent()));
+//            });
+//            gatewayDiscordClient.onDisconnect().block();
+//        } catch (Exception e) {
+//            System.err.println(e.getMessage());
+//        }
     }
+
 
     /**
      * 时间处理类
