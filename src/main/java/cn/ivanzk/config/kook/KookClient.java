@@ -42,7 +42,7 @@ public class KookClient {
     }
 
     public void toZq(String message) {
-        message = message.replaceAll(":bsb", "")
+        message = message
                 .replaceAll(":hl:", "")
                 .replaceAll(":sfbtm:", "")
                 .replaceAll(":seboth:", "")
@@ -50,7 +50,8 @@ public class KookClient {
                 .replaceAll(":bsb_fabric:", "")
                 .replaceAll(":bsb_lumber:", "")
                 .replaceAll(":bsb_leather:", "")
-                .replaceAll(":bsb_iron:", "");
+                .replaceAll(":bsb_iron:", "")
+                .replaceAll(":bsb:", "");
         List<Guild> guilds = guildList();
         for (Guild guild : guilds) {
             String guildId = guild.getId();
