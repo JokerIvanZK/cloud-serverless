@@ -10,6 +10,7 @@ import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.lifecycle.ReadyEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
+import discord4j.core.object.entity.channel.MessageChannel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -37,24 +38,30 @@ public class DiscordForward implements BasicService {
     @Autowired(required = false)
     private KookClient kookClient;
 
+    private static final String channel_gx = "700234578195120224";
+    private static final String channel_zq = "1085791194367410266";
 
     @Override
     public void start() {
-        kookClient.sendMessage("测试");
         try {
             gatewayDiscordClient.on(ReadyEvent.class).subscribe(event -> {
                 if (discordForwardProperties.mirai) {
                     miraiBot.noticeAdmin(String.format("discord:<%s>上线", event.getSelf().getUsername()));
-                } else if(discordForwardProperties.kook) {
-                    kookClient.sendMessage(String.format("discord:<%s>上线", event.getSelf().getUsername()));
                 }
             });
             gatewayDiscordClient.on(MessageCreateEvent.class).subscribe(event -> {
                 final Message message = event.getMessage();
+                final MessageChannel channel = message.getChannel().block();
+                String channelId = channel.getId().asString();
+
                 if (discordForwardProperties.mirai) {
                     miraiBot.sendMessage(TimestampUtil.matcherTimeStamp(message.getContent()));
-                } else if(discordForwardProperties.kook) {
-                    kookClient.sendMessage(TimestampUtil.matcherTimeStamp(message.getContent()));
+                } else if (discordForwardProperties.kook) {
+                    if (SmallTool.isEqual(channel_gx, channelId)) {
+                        kookClient.sendMessage(TimestampUtil.matcherTimeStamp(message.getContent()), "更新");
+                    }else if(SmallTool.isEqual(channel_zq, channelId)){
+                        kookClient.sendMessage(TimestampUtil.matcherTimeStamp(message.getContent()), "债券");
+                    }
                 }
             });
             gatewayDiscordClient.onDisconnect().block();

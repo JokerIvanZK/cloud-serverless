@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.java.comn.assist.GenericClazz;
 import com.java.comn.assist.MapWrap;
 import com.java.comn.util.JacksonUtil;
+import com.java.comn.util.SmallTool;
 import com.net.comn.http.HttpClientProxy;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -28,13 +29,17 @@ public class KookClient {
         return new KookProperties();
     }
 
-    public void sendMessage(String message) {
+    public void sendMessage(String message, String sign) {
         List<Guild> guilds = guildList();
         for (Guild guild : guilds) {
             String guildId = guild.getId();
             List<Channel> channels = channelList(guildId);
             for (Channel channel : channels) {
-                if (channel.getName().indexOf("债券") >= 0) {
+                if (SmallTool.notEmpty(sign)) {
+                    if (channel.getName().indexOf("sign") >= 0) {
+                        channelMessage(channel.getId(), message);
+                    }
+                } else {
                     channelMessage(channel.getId(), message);
                 }
             }
