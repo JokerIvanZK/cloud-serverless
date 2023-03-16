@@ -56,7 +56,7 @@ public class KookClient {
             String guildId = guild.getId();
             List<Channel> channels = channelList(guildId);
             for (Channel channel : channels) {
-                if (channel.getName().indexOf("债券") >= 0) {
+                if (channel.getName().indexOf("债券") >= 0 || channel.getName().indexOf("債券") >= 0) {
                     channelMessage(channel.getId(), message);
                 }
             }
