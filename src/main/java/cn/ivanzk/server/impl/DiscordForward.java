@@ -58,9 +58,9 @@ public class DiscordForward implements BasicService {
                     miraiBot.sendMessage(TimestampUtil.matcherTimeStamp(message.getContent()));
                 } else if (discordForwardProperties.kook) {
                     if (SmallTool.isEqual(channel_gx, channelId)) {
-                        kookClient.sendMessage(TimestampUtil.matcherTimeStamp(message.getContent()), "更新");
+                        kookClient.toGx(TimestampUtil.matcherTimeStamp(message.getContent()));
                     }else if(SmallTool.isEqual(channel_zq, channelId)){
-                        kookClient.sendMessage(TimestampUtil.matcherTimeStamp(message.getContent()), "债券");
+                        kookClient.toZq(message.getContent());
                     }
                 }
             });

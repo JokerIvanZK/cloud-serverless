@@ -4,7 +4,6 @@ import com.google.common.collect.Maps;
 import com.java.comn.assist.GenericClazz;
 import com.java.comn.assist.MapWrap;
 import com.java.comn.util.JacksonUtil;
-import com.java.comn.util.SmallTool;
 import com.net.comn.http.HttpClientProxy;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -29,21 +28,43 @@ public class KookClient {
         return new KookProperties();
     }
 
-    public void sendMessage(String message, String sign) {
+    public void toGx(String message) {
         List<Guild> guilds = guildList();
         for (Guild guild : guilds) {
             String guildId = guild.getId();
             List<Channel> channels = channelList(guildId);
             for (Channel channel : channels) {
-                if (SmallTool.notEmpty(sign)) {
-                    if (channel.getName().indexOf("sign") >= 0) {
-                        channelMessage(channel.getId(), message);
-                    }
-                } else {
+                if (channel.getName().indexOf("更新") >= 0) {
                     channelMessage(channel.getId(), message);
                 }
             }
         }
+    }
+
+    public void toZq(String message) {
+        message = message.replaceAll(":bsb", "")
+                .replaceAll(":hl:", "")
+                .replaceAll(":sfbtm:", "")
+                .replaceAll(":seboth:", "")
+                .replaceAll(":setop:", "")
+                .replaceAll(":bsb_fabric:", "")
+                .replaceAll(":bsb_lumber:", "")
+                .replaceAll(":bsb_leather:", "")
+                .replaceAll(":bsb_iron:", "");
+        List<Guild> guilds = guildList();
+        for (Guild guild : guilds) {
+            String guildId = guild.getId();
+            List<Channel> channels = channelList(guildId);
+            for (Channel channel : channels) {
+                if (channel.getName().indexOf("债券") >= 0) {
+                    channelMessage(channel.getId(), message);
+                }
+            }
+        }
+    }
+
+    public void sendMessage(String channelId, String message) {
+        channelMessage(channelId, message);
     }
 
     public List<Guild> guildList() {
