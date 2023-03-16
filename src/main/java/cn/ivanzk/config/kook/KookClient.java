@@ -51,7 +51,10 @@ public class KookClient {
                 .replaceAll(":bsb_lumber:", "")
                 .replaceAll(":bsb_leather:", "")
                 .replaceAll(":bsb_iron:", "")
-                .replaceAll(":bsb:", "");
+                .replaceAll(":bsb:", "")
+                .replaceAll("[(A-Za-z)]", "")
+                .replaceAll("@", "")
+                .replaceAll("[ ]+", " ");
         List<Guild> guilds = guildList();
         for (Guild guild : guilds) {
             String guildId = guild.getId();
