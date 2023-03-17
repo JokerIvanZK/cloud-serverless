@@ -43,9 +43,9 @@ public class DiscordForward implements BasicService {
     private KookClient kookClient;
 
     private static Map<String, String> dcChannelMap = Maps.newHashMap();
-    @Value("${mirai-forward-channel-names}")
+    @Value("${service.mirai-forward-channel-names}")
     private String miraiForwardChannelNames = "";
-    @Value("${kook-forward-channel-names}")
+    @Value("${service.kook-forward-channel-names}")
     private String kookForwardChannelNames = "";
 
     @Override
