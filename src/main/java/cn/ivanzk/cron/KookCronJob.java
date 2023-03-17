@@ -97,7 +97,7 @@ public class KookCronJob {
                             MapWrap result = JacksonUtil.fromJson(jsonString, MapWrap.class);
                             String imgUrl = SmallTool.toString(result.get("data.url"), null);
                             if (SmallTool.notEmpty(imgUrl)) {
-                                kookClient.sendImg("测试更新", imgUrl);
+                                kookClient.sendImg("更新", imgUrl);
                             }
                         }
                     }
