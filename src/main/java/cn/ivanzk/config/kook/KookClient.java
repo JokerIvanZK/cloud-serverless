@@ -1,6 +1,5 @@
 package cn.ivanzk.config.kook;
 
-import com.github.houbb.opencc4j.util.ZhTwConverterUtil;
 import com.google.common.collect.Maps;
 import com.java.comn.assist.GenericClazz;
 import com.java.comn.assist.MapWrap;
@@ -59,9 +58,12 @@ public class KookClient {
             return;
         }
         channelMap.forEach((id, name) -> {
-            if (name.indexOf(channelName) >= 0 || name.indexOf(ZhTwConverterUtil.toTraditional(channelName)) >= 0) {
+            if (name.indexOf(channelName) >= 0) {
                 channelMessage(kookProperties, id, formatMessage(message));
             }
+//            if (name.indexOf(channelName) >= 0 || name.indexOf(ZhTwConverterUtil.toTraditional(channelName)) >= 0) {
+//                channelMessage(kookProperties, id, formatMessage(message));
+//            }
         });
     }
 

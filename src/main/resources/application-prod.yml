@@ -4,6 +4,8 @@ server:
 service:
   discord-forward-mirai: false
   discord-forward-kook: false
+  mirai-forward-channel-names: 更新
+  kook-forward-channel-names: 债券
 
 discord:
   enable: false
