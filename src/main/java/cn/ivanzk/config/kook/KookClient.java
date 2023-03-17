@@ -1,14 +1,18 @@
 package cn.ivanzk.config.kook;
 
+import com.github.houbb.opencc4j.util.ZhTwConverterUtil;
 import com.google.common.collect.Maps;
 import com.java.comn.assist.GenericClazz;
 import com.java.comn.assist.MapWrap;
 import com.java.comn.util.JacksonUtil;
 import com.net.comn.http.HttpClientProxy;
+import com.net.comn.server.ServerContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 
 import java.util.List;
 import java.util.Map;
@@ -20,6 +24,8 @@ import java.util.stream.Collectors;
 @Configuration
 @ConditionalOnProperty(name = "kook.enable", havingValue = "true")
 public class KookClient {
+    private static Map<String, String> guildMap = Maps.newHashMap();
+    private static Map<String, String> channelMap = Maps.newHashMap();
     private static HttpClientProxy httpClientProxy = new HttpClientProxy();
 
     @Bean
@@ -28,54 +34,42 @@ public class KookClient {
         return new KookProperties();
     }
 
-    public void toGx(String message) {
-        List<Guild> guilds = guildList();
-        for (Guild guild : guilds) {
+    @Bean
+    @Autowired
+    @DependsOn("kookProperties")
+    public Object kookClientInit(KookProperties kookProperties) {
+        List<Guild> guilds = guildList(kookProperties);
+        guilds.forEach(guild -> {
             String guildId = guild.getId();
-            List<Channel> channels = channelList(guildId);
-            for (Channel channel : channels) {
-                if (channel.getName().indexOf("更新") >= 0) {
-                    channelMessage(channel.getId(), message);
-                }
-            }
+            String guildName = guild.getName();
+            guildMap.put(guildId, guildName);
+            List<Channel> channels = channelList(kookProperties, guildId);
+            channels.forEach(channel -> {
+                String channelId = channel.getId();
+                String channelName = channel.getName();
+                channelMap.put(channelId, channelName);
+            });
+        });
+        return null;
+    }
+
+    public void sendMessage(String channelName, String message) {
+        KookProperties kookProperties = ServerContext.getBean(KookProperties.class);
+        if (kookProperties == null) {
+            return;
         }
-    }
-
-    public void toZq(String message) {
-        message = message
-                .replaceAll(":hl:", "")
-                .replaceAll(":sfbtm:", "")
-                .replaceAll(":seboth:", "")
-                .replaceAll(":setop:", "")
-                .replaceAll(":bsb_fabric:", "")
-                .replaceAll(":bsb_lumber:", "")
-                .replaceAll(":bsb_leather:", "")
-                .replaceAll(":bsb_iron:", "")
-                .replaceAll(":bsb:", "")
-                .replaceAll("[(A-Za-z)]", "")
-                .replaceAll("@", "")
-                .replaceAll("[ ]+", " ");
-        List<Guild> guilds = guildList();
-        for (Guild guild : guilds) {
-            String guildId = guild.getId();
-            List<Channel> channels = channelList(guildId);
-            for (Channel channel : channels) {
-                if (channel.getName().indexOf("债券") >= 0 || channel.getName().indexOf("債券") >= 0) {
-                    channelMessage(channel.getId(), message);
-                }
+        channelMap.forEach((id, name) -> {
+            if (name.indexOf(channelName) >= 0 || name.indexOf(ZhTwConverterUtil.toTraditional(channelName)) >= 0) {
+                channelMessage(kookProperties, id, formatMessage(message));
             }
-        }
+        });
     }
 
-    public void sendMessage(String channelId, String message) {
-        channelMessage(channelId, message);
-    }
-
-    public List<Guild> guildList() {
+    public List<Guild> guildList(KookProperties kookProperties) {
         try {
-            String url = kookProperties().getBaseUrl() + kookProperties().getGuildList();
+            String url = kookProperties.getBaseUrl() + kookProperties.getGuildList();
             Map<String, Object> header = Maps.newHashMap();
-            header.put("Authorization", "Bot " + kookProperties().getToken());
+            header.put("Authorization", "Bot " + kookProperties.getToken());
             String jsonString = httpClientProxy.doGetForResult(url, header);
             MapWrap result = JacksonUtil.fromJson(jsonString, MapWrap.class);
             List<Map<String, Object>> list = result.get("data.items", GenericClazz.getArrayListClazz());
@@ -87,11 +81,11 @@ public class KookClient {
         return null;
     }
 
-    public List<Channel> channelList(String guildId) {
+    public List<Channel> channelList(KookProperties kookProperties, String guildId) {
         try {
-            String url = kookProperties().getBaseUrl() + kookProperties().getChannelList() + "?guild_id=" + guildId;
+            String url = kookProperties.getBaseUrl() + kookProperties.getChannelList() + "?guild_id=" + guildId;
             Map<String, Object> header = Maps.newHashMap();
-            header.put("Authorization", "Bot " + kookProperties().getToken());
+            header.put("Authorization", "Bot " + kookProperties.getToken());
             String jsonString = httpClientProxy.doGetForResult(url, header);
             MapWrap result = JacksonUtil.fromJson(jsonString, MapWrap.class);
             List<Map<String, Object>> list = result.get("data.items", GenericClazz.getArrayListClazz());
@@ -106,11 +100,11 @@ public class KookClient {
         return null;
     }
 
-    public void channelMessage(String channelId, String content) {
+    public void channelMessage(KookProperties kookProperties, String channelId, String content) {
         try {
-            String url = kookProperties().getBaseUrl() + kookProperties().getChannelMessage();
+            String url = kookProperties.getBaseUrl() + kookProperties.getChannelMessage();
             Map<String, Object> header = Maps.newHashMap();
-            header.put("Authorization", "Bot " + kookProperties().getToken());
+            header.put("Authorization", "Bot " + kookProperties.getToken());
             MapWrap body = new MapWrap();
             body.put("target_id", channelId);
             body.put("content", content);
@@ -119,4 +113,23 @@ public class KookClient {
             e.printStackTrace();
         }
     }
+
+
+    private static String formatMessage(String message) {
+        return message
+                .replaceAll(":hl:", "")
+                .replaceAll(":sfbtm:", "")
+                .replaceAll(":seboth:", "")
+                .replaceAll(":setop:", "")
+                .replaceAll(":bsb_fabric:", "")
+                .replaceAll(":bsb_lumber:", "")
+                .replaceAll(":bsb_leather:", "")
+                .replaceAll(":bsb_iron:", "")
+                .replaceAll(":bsb:", "")
+                .replaceAll("[(A-Za-z)]", "")
+                .replaceAll("@", "")
+                .replaceAll("[<]+[\\d]+[>]+", "")
+                .replaceAll("[ ]+", " ");
+    }
+
 }

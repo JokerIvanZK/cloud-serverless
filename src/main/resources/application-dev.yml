@@ -2,25 +2,21 @@ server:
   port: 9000
 
 service:
-  discord-forward:
-    enable: true
-    forward:
-      mirai: false
-      kook: true
-
+  discord-forward-mirai: false
+  discord-forward-kook: false
 
 discord:
   enable: false
   token:
+  own-guildId: 0
 
 kook:
-  enable: true
+  enable: false
   token:
   base-url: https://www.kookapp.cn/
   guild-list: /api/v3/guild/list
   channel-list: /api/v3/channel/list
   channel-message: /api/v3/channel/message
-
 
 mirai:
   enable: false
