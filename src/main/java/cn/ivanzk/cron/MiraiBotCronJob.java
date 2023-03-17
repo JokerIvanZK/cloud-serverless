@@ -24,7 +24,7 @@ public class MiraiBotCronJob {
     public void heartBeat() {
         try {
             miraiBot.isOnline();
-            miraiBot.sendMessage("心跳");
+            miraiBot.noticeAdmin("心跳");
         } catch (Exception e) {
             System.err.println("心跳任务失败，原因：" + e.getMessage());
         }
