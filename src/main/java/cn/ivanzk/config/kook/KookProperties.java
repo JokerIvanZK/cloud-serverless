@@ -9,6 +9,7 @@ public class KookProperties {
     private String guildList;
     private String channelList;
     private String channelMessage;
+    private String uploadFile;
 
     public String getToken() {
         return this.token;
@@ -48,5 +49,13 @@ public class KookProperties {
 
     public void setChannelMessage(String channelMessage) {
         this.channelMessage = channelMessage;
+    }
+
+    public String getUploadFile() {
+        return this.uploadFile;
+    }
+
+    public void setUploadFile(String uploadFile) {
+        this.uploadFile = uploadFile;
     }
 }

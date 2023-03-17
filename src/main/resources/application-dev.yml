@@ -19,6 +19,7 @@ kook:
   guild-list: /api/v3/guild/list
   channel-list: /api/v3/channel/list
   channel-message: /api/v3/channel/message
+  upload-file: /api/v3/asset/create
 
 mirai:
   enable: false

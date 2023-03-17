@@ -65,6 +65,18 @@ public class KookClient {
         });
     }
 
+    public void sendImg(String channelName, String imgUrl) {
+        KookProperties kookProperties = ServerContext.getBean(KookProperties.class);
+        if (kookProperties == null) {
+            return;
+        }
+        channelMap.forEach((id, name) -> {
+            if (name.indexOf(channelName) >= 0 || name.indexOf(ZhTwConverterUtil.toTraditional(channelName)) >= 0) {
+                channelMessage(kookProperties, id, imgUrl);
+            }
+        });
+    }
+
     public List<Guild> guildList(KookProperties kookProperties) {
         try {
             String url = kookProperties.getBaseUrl() + kookProperties.getGuildList();
