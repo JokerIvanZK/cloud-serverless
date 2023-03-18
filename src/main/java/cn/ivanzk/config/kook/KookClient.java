@@ -90,6 +90,7 @@ public class KookClient {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("关闭无效连接:" + httpClientProxy.clearInvalidConnection());
         return null;
     }
 
@@ -109,6 +110,7 @@ public class KookClient {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("关闭无效连接:" + httpClientProxy.clearInvalidConnection());
         return null;
     }
 
@@ -124,6 +126,7 @@ public class KookClient {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("关闭无效连接:" + httpClientProxy.clearInvalidConnection());
     }
 
 

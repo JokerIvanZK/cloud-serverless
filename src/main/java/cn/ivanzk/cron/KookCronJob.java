@@ -51,6 +51,7 @@ public class KookCronJob {
      */
     @Scheduled(cron = "0 0/5 * * * ?")
     public void updateMessage() {
+        httpClientProxy.closeConnectionPool();
         try {
             String url = "https://asia.archeage.com/news?lang=zh_TW";
             Map<String, Object> header = Maps.newHashMap();
@@ -60,6 +61,7 @@ public class KookCronJob {
             Matcher matcher = Pattern.compile(pattern).matcher(html);
             if (matcher.find()) {
                 String newsUrl = matcher.group();
+                System.out.println(newsUrl);
                 if (latestNewsUrl == null) {
                     latestNewsUrl = newsUrl;
                 } else {
@@ -106,5 +108,6 @@ public class KookCronJob {
         } catch (Exception e) {
             System.err.println("心跳任务失败，原因：" + e.getMessage());
         }
+        System.out.println("关闭无效连接:" + httpClientProxy.clearInvalidConnection());
     }
 }
