@@ -66,7 +66,6 @@ public class KookCronJob {
                     latestNewsUrl = newsUrl;
                 } else {
                     if (!SmallTool.isEqual(latestNewsUrl, newsUrl)) {
-                        latestNewsUrl = newsUrl;
                         url = "https://asia.archeage.com" + newsUrl;
                         html = httpClientProxy.doGetForResult(url, header);
                         pattern = "<article class=\"view\">{1}[\\d\\D]+</article>{1}";
@@ -102,6 +101,7 @@ public class KookCronJob {
                                 kookClient.sendImg("更新", imgUrl);
                             }
                         }
+                        latestNewsUrl = newsUrl;
                     }
                 }
             }
