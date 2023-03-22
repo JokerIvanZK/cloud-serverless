@@ -5,7 +5,7 @@ service:
   discord-forward-mirai: false
   discord-forward-kook: false
   mirai-forward-channel-names: 更新
-  kook-forward-channel-names: 债券
+  kook-forward-channel-names: 债券,admin测试
 
 discord:
   enable: false

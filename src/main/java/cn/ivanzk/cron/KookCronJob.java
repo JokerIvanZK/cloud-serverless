@@ -46,19 +46,6 @@ public class KookCronJob {
     private static String latestNewsUrl = null;
 
     /**
-     * 测试
-     */
-    @Scheduled(cron = "0/10 * * * * ?")
-    public void test() {
-        try {
-            kookClient.directMessage(kookProperties.getAdmin(), "测试");
-            kookClient.channelMessage("admin测试", "测试");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * 心跳任务
      * 每天17点执行
      */
