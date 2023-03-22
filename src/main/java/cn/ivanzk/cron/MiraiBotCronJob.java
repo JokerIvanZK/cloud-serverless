@@ -34,7 +34,7 @@ public class MiraiBotCronJob {
         try {
             miraiBot.noticeAdmin("心跳");
         } catch (Exception e) {
-            System.err.println("心跳任务失败，原因：" + e.getMessage());
+            e.printStackTrace();
         }
     }
 

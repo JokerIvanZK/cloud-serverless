@@ -27,6 +27,8 @@ public class Guild {
 
     private String welcome_channel_id;
 
+    private Channel[] channels;
+
     private Integer boost_num;
 
     private Integer level;
@@ -117,6 +119,14 @@ public class Guild {
 
     public void setWelcome_channel_id(String welcome_channel_id) {
         this.welcome_channel_id = welcome_channel_id;
+    }
+
+    public Channel[] getChannels() {
+        return this.channels;
+    }
+
+    public void setChannels(Channel[] channels) {
+        this.channels = channels;
     }
 
     public Integer getBoost_num() {

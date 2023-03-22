@@ -5,13 +5,17 @@ package cn.ivanzk.config.kook;
  */
 public class Channel {
     private String id;
+    private String guild_id;
     private String user_id;
     private String parent_id;
     private String name;
+    private String topic;
     private int type;
     private int level;
+    private int slow_mode;
     private int limit_amount;
     private boolean is_category;
+    private String server_url;
 
     public String getId() {
         return this.id;
@@ -19,6 +23,14 @@ public class Channel {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getGuild_id() {
+        return this.guild_id;
+    }
+
+    public void setGuild_id(String guild_id) {
+        this.guild_id = guild_id;
     }
 
     public String getUser_id() {
@@ -45,6 +57,14 @@ public class Channel {
         this.name = name;
     }
 
+    public String getTopic() {
+        return this.topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
+
     public int getType() {
         return this.type;
     }
@@ -61,6 +81,14 @@ public class Channel {
         this.level = level;
     }
 
+    public int getSlow_mode() {
+        return this.slow_mode;
+    }
+
+    public void setSlow_mode(int slow_mode) {
+        this.slow_mode = slow_mode;
+    }
+
     public int getLimit_amount() {
         return this.limit_amount;
     }
@@ -75,5 +103,13 @@ public class Channel {
 
     public void setIs_category(boolean is_category) {
         this.is_category = is_category;
+    }
+
+    public String getServer_url() {
+        return this.server_url;
+    }
+
+    public void setServer_url(String server_url) {
+        this.server_url = server_url;
     }
 }

@@ -10,16 +10,19 @@ service:
 discord:
   enable: false
   token:
-  own-guildId: 0
 
 kook:
   enable: false
   token:
+  admin:
   base-url: https://www.kookapp.cn/
   guild-list: /api/v3/guild/list
+  guild-view: /api/v3/guild/view
   channel-list: /api/v3/channel/list
+  channel-view: /api/v3/channel/view
   channel-message: /api/v3/channel/message
   upload-file: /api/v3/asset/create
+  direct-message: /api/v3/direct-message/create
 
 mirai:
   enable: false

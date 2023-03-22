@@ -46,12 +46,37 @@ public class KookCronJob {
     private static String latestNewsUrl = null;
 
     /**
+     * 测试
+     */
+    @Scheduled(cron = "0/10 * * * * ?")
+    public void test() {
+        try {
+            kookClient.directMessage(kookProperties.getAdmin(), "测试");
+            kookClient.channelMessage("admin测试", "测试");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 心跳任务
+     * 每天17点执行
+     */
+    @Scheduled(cron = "0 0 17 * * ?")
+    public void heartBeat() {
+        try {
+            kookClient.directMessage(kookProperties.getAdmin(), "心跳");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * 查询更新
      * 每5分钟执行一次
      */
     @Scheduled(cron = "0 0/5 * * * ?")
     public void updateMessage() {
-        httpClientProxy.closeConnectionPool();
         try {
             String url = "https://asia.archeage.com/news?lang=zh_TW";
             Map<String, Object> header = Maps.newHashMap();
@@ -98,7 +123,7 @@ public class KookCronJob {
                             MapWrap result = JacksonUtil.fromJson(jsonString, MapWrap.class);
                             String imgUrl = SmallTool.toString(result.get("data.url"), null);
                             if (SmallTool.notEmpty(imgUrl)) {
-                                kookClient.sendImg("更新", imgUrl);
+                                kookClient.channelImg("更新", imgUrl);
                             }
                         }
                         latestNewsUrl = newsUrl;
@@ -106,7 +131,7 @@ public class KookCronJob {
                 }
             }
         } catch (Exception e) {
-            System.err.println("心跳任务失败，原因：" + e.getMessage());
+            e.printStackTrace();
         }
         System.out.println("关闭无效连接:" + httpClientProxy.clearInvalidConnection());
     }
