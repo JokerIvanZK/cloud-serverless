@@ -70,11 +70,6 @@
             <artifactId>discord4j-core</artifactId>
             <version>3.2.2</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>net.mamoe</groupId>-->
-<!--            <artifactId>mirai-core-jvm</artifactId>-->
-<!--            <version>2.14.0</version>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
@@ -103,7 +98,7 @@
             <groupId>net.mamoe</groupId>
             <artifactId>mirai-core-all</artifactId>
             <version>2.14.0</version>
-            <systemPath>${project.basedir}/src/main/lib/mirai-core-all-2.14.0-all.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/lib/mirai-core-all-2.15.0-M1-all.jar</systemPath>
             <scope>system</scope>
         </dependency>
     </dependencies>

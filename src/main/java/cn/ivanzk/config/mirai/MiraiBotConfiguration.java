@@ -2,6 +2,7 @@ package cn.ivanzk.config.mirai;
 
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.BotFactory;
+import net.mamoe.mirai.auth.BotAuthorization;
 import net.mamoe.mirai.utils.BotConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -24,7 +25,7 @@ public class MiraiBotConfiguration {
 
     @Bean
     public Bot bot(MiraiBotProperties miraiBotProperties) {
-        Bot bot = BotFactory.INSTANCE.newBot(miraiBotProperties.getQq(), miraiBotProperties.getPassword(), new BotConfiguration() {{
+        Bot bot = BotFactory.INSTANCE.newBot(miraiBotProperties.getQq(), BotAuthorization.byQRCode(), new BotConfiguration() {{
             noNetworkLog();
             fileBasedDeviceInfo(miraiBotProperties.getDeviceInfoPath());
             setProtocol(miraiBotProperties.getProtocol());
