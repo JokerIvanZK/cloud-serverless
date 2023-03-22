@@ -57,7 +57,7 @@ public class MiraiBotCronJob {
                 }
             }
         } catch (Exception e) {
-            System.err.println("重连任务失败，原因：" + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

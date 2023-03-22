@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
  * @author zk
  */
 @Component
-@ConditionalOnExpression("${service.discord-forward-mirai:true} || ${discord-forward-kook:true}")
+@ConditionalOnExpression("${service.discord-forward-mirai:true} || ${service.discord-forward-kook:true}")
 @ConditionalOnBean(GatewayDiscordClient.class)
 public class DiscordForward implements BasicService {
     @Autowired
@@ -76,6 +76,7 @@ public class DiscordForward implements BasicService {
                 final MessageChannel channel = message.getChannel().block();
                 Long channelId = channel.getId().asLong();
                 String channelName = channelCache.get(channelId);
+                System.out.println("OnMessageCreateEvent:" + channelName + ":" + message.getContent());
                 if (miraiBot != null && miraiForwardChannelNames.contains(channelName)) {
                     miraiBot.sendMessage(TimestampUtil.matcherTimeStamp(message.getContent()));
                 }
@@ -85,7 +86,7 @@ public class DiscordForward implements BasicService {
             });
             gatewayDiscordClient.onDisconnect().block();
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
