@@ -7,4 +7,4 @@ MiraiBot-QQ机器人、discord机器人、kook机器人、定时任务、httpCli
 本项目使用`Apache-2.0 license`许可证。许可证的完整文本可参见[LICENSE](https://github.com/JokerIvanZK/cloud-serverless/blob/master/LICENSE)
 
 ## 支持
-如果有任何问题或建议，欢迎提issue
+如果有任何问题或建议，欢迎提[issue](https://github.com/JokerIvanZK/cloud-serverless/issues)
