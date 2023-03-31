@@ -33,11 +33,18 @@ public class MiraiBot {
         if (!bot.isOnline()) {
             return;
         }
+        message = formatMessage(message);
         for (Long aLong : miraiBotProperties.getFriends()) {
             bot.getFriend(aLong).sendMessage(message);
         }
         for (Long aLong : miraiBotProperties.getGroups()) {
             bot.getGroup(aLong).sendMessage(message);
         }
+    }
+
+    private static String formatMessage(String message) {
+        return message
+                .replaceAll("[<]{1}[\\d\\D]+[>]{1}", "")
+                .replaceAll("[ ]+", " ");
     }
 }

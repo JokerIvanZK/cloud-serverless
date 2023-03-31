@@ -227,19 +227,8 @@ public class KookClient {
 
     private static String formatMessage(String message) {
         return message
-                .replaceAll(":hl:", "")
-                .replaceAll(":sfbtm:", "")
-                .replaceAll(":seboth:", "")
-                .replaceAll(":setop:", "")
-                .replaceAll(":bsb_fabric:", "")
-                .replaceAll(":bsb_lumber:", "")
-                .replaceAll(":bsb_leather:", "")
-                .replaceAll(":bsb_iron:", "")
-                .replaceAll(":bsb:", "")
-                .replaceAll("[(A-Za-z)]", "")
-                .replaceAll("@", "")
-                .replaceAll("[<]+[\\d]+[>]+", "")
+                .replaceAll("[A-Za-z_@:]", "")
+                .replaceAll("[<]{1}[\\d\\D]+[>]{1}", "")
                 .replaceAll("[ ]+", " ");
     }
-
 }
