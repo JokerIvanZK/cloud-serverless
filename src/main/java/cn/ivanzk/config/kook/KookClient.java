@@ -228,7 +228,7 @@ public class KookClient {
     private static String formatMessage(String message) {
         return message
                 .replaceAll("[A-Za-z_@:]", "")
-                .replaceAll("[<]{1}[\\d\\D]+[>]{1}", "")
+                .replaceAll("[<]{1}[\\d]+[>]{1}", "")
                 .replaceAll("[ ]+", " ");
     }
 }
