@@ -26,7 +26,12 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,7 +51,7 @@ public class KookCronJob {
 
     private static HttpClientProxy httpClientProxy = new HttpClientProxy();
     @Value("${lastPushUrl}")
-    private static String lastPushUrl = null;
+    private String lastPushUrl = null;
 
     /**
      * 心跳任务
@@ -65,7 +70,8 @@ public class KookCronJob {
      * 查询更新
      * 每5分钟执行一次
      */
-    @Scheduled(cron = "0 0/5 * * * ?")
+//    @Scheduled(cron = "0 0/5 * * * ?")
+    @Scheduled(cron = "0 0/2 * * * ? ")
     public void updateMessage() {
         System.out.println("关闭无效连接:" + httpClientProxy.clearInvalidConnection());
         try {
@@ -80,7 +86,6 @@ public class KookCronJob {
             }
             if (SmallTool.isEmpty(lastPushUrl)) {
                 lastPushUrl = awaitPushUrl.get(awaitPushUrl.size() - 1);
-                return;
             }
             int cutoff = 0;
             for (int i = 0; i < awaitPushUrl.size(); i++) {
@@ -91,6 +96,14 @@ public class KookCronJob {
                 }
             }
             awaitPushUrl = awaitPushUrl.subList(cutoff + 1, awaitPushUrl.size());
+
+            System.out.println("==========================");
+            System.out.println("上次推送的消息:" + lastPushUrl);
+            for (String s : awaitPushUrl) {
+                System.out.println("等待推送的消息:" + s);
+            }
+            System.out.println("==========================");
+
             for (String newsUrl : awaitPushUrl) {
                 url = "https://asia.archeage.com" + newsUrl;
                 html = httpClientProxy.doGetForResult(url, Maps.newHashMap());
@@ -123,11 +136,10 @@ public class KookCronJob {
                     String jsonString = EntityUtils.toString(responseEntity, "UTF-8");
                     MapWrap result = JacksonUtil.fromJson(jsonString, MapWrap.class);
                     String imgUrl = SmallTool.toString(result.get("data.url"), null);
-                    Thread.sleep(1000);
                     if (SmallTool.notEmpty(imgUrl)) {
                         kookClient.channelImg("更新", imgUrl);
                     }
-                    Thread.sleep(3000);
+                    Thread.sleep(5000);
                 }
                 lastPushUrl = newsUrl;
             }
