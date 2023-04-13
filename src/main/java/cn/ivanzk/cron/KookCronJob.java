@@ -65,7 +65,6 @@ public class KookCronJob {
      * 查询更新
      * 每5分钟执行一次
      */
-//    @Scheduled(cron = "0 0/30 * * * ?")
     @Scheduled(cron = "0 0/5 * * * ?")
     public void updateMessage() {
         System.out.println("关闭无效连接:" + httpClientProxy.clearInvalidConnection());
@@ -124,9 +123,11 @@ public class KookCronJob {
                     String jsonString = EntityUtils.toString(responseEntity, "UTF-8");
                     MapWrap result = JacksonUtil.fromJson(jsonString, MapWrap.class);
                     String imgUrl = SmallTool.toString(result.get("data.url"), null);
+                    Thread.sleep(1000);
                     if (SmallTool.notEmpty(imgUrl)) {
                         kookClient.channelImg("更新", imgUrl);
                     }
+                    Thread.sleep(3000);
                 }
                 lastPushUrl = newsUrl;
             }
