@@ -34,3 +34,5 @@ mirai:
   device-info-path: device.json
   #  protocol: ANDROID_PHONE ANDROID_PAD ANDROID_WATCH IPAD MACOS
   protocol: MACOS
+
+lastPushUrl: /news/4740?page=1

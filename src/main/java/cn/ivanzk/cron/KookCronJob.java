@@ -21,6 +21,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -44,6 +45,7 @@ public class KookCronJob {
     private KookProperties kookProperties;
 
     private static HttpClientProxy httpClientProxy = new HttpClientProxy();
+    @Value("${lastPushUrl}")
     private static String lastPushUrl = null;
 
     /**
@@ -66,6 +68,7 @@ public class KookCronJob {
 //    @Scheduled(cron = "0 0/30 * * * ?")
     @Scheduled(cron = "0 0/5 * * * ?")
     public void updateMessage() {
+        System.out.println("关闭无效连接:" + httpClientProxy.clearInvalidConnection());
         try {
             String url = "https://asia.archeage.com/news?lang=zh_TW";
             String html = httpClientProxy.doGetForResult(url, Maps.newHashMap());
@@ -130,6 +133,5 @@ public class KookCronJob {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("关闭无效连接:" + httpClientProxy.clearInvalidConnection());
     }
 }
