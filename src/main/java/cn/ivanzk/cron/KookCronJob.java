@@ -8,6 +8,7 @@ import com.java.comn.assist.MapWrap;
 import com.java.comn.util.JacksonUtil;
 import com.java.comn.util.SmallTool;
 import com.net.comn.http.HttpClientProxy;
+import com.net.comn.server.ServerContext;
 import gui.ava.html.parser.HtmlParser;
 import gui.ava.html.parser.HtmlParserImpl;
 import gui.ava.html.renderer.ImageRenderer;
@@ -44,11 +45,6 @@ import java.util.regex.Pattern;
 @Component
 @ConditionalOnBean(KookClient.class)
 public class KookCronJob {
-    @Autowired
-    private KookClient kookClient;
-    @Autowired
-    private KookProperties kookProperties;
-
     private static HttpClientProxy httpClientProxy = new HttpClientProxy();
     @Value("${lastPushUrl}")
     private String lastPushUrl = null;
@@ -59,6 +55,11 @@ public class KookCronJob {
      */
     @Scheduled(cron = "0 0 17 * * ?")
     public void heartBeat() {
+        KookClient kookClient = ServerContext.getBean(KookClient.class);
+        KookProperties kookProperties = ServerContext.getBean(KookProperties.class);
+        if (kookClient == null || kookProperties == null) {
+            return;
+        }
         try {
             kookClient.directMessage(kookProperties.getAdmin(), "心跳");
         } catch (Exception e) {
@@ -74,6 +75,11 @@ public class KookCronJob {
     @Scheduled(cron = "0 0/2 * * * ? ")
     public void updateMessage() {
         System.out.println("关闭无效连接:" + httpClientProxy.clearInvalidConnection());
+        KookClient kookClient = ServerContext.getBean(KookClient.class);
+        KookProperties kookProperties = ServerContext.getBean(KookProperties.class);
+        if (kookClient == null || kookProperties == null) {
+            return;
+        }
         try {
             String url = "https://asia.archeage.com/news?lang=zh_TW";
             String html = httpClientProxy.doGetForResult(url, Maps.newHashMap());

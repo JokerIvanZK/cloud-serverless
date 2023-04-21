@@ -1,6 +1,9 @@
 package cn.ivanzk.cron;
 
+import cn.ivanzk.config.kook.KookClient;
+import cn.ivanzk.config.kook.KookProperties;
 import cn.ivanzk.config.mirai.MiraiBot;
+import com.net.comn.server.ServerContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -23,6 +26,10 @@ public class MiraiBotCronJob {
      */
     @Scheduled(cron = "0 0 17 * * ?")
     public void heartBeat() {
+        MiraiBot miraiBot = ServerContext.getBean(MiraiBot.class);
+        if (miraiBot == null) {
+            return;
+        }
         try {
             miraiBot.noticeAdmin("心跳");
         } catch (Exception e) {
