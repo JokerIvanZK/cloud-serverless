@@ -45,7 +45,7 @@ import java.util.regex.Pattern;
 @Component
 @ConditionalOnBean(KookClient.class)
 public class KookCronJob {
-    private static HttpClientProxy httpClientProxy = new HttpClientProxy();
+    private static final HttpClientProxy httpClientProxy = new HttpClientProxy();
     @Value("${lastPushUrl}")
     private String lastPushUrl = null;
 
@@ -71,86 +71,95 @@ public class KookCronJob {
      * 查询更新
      * 每5分钟执行一次
      */
-//    @Scheduled(cron = "0 0/5 * * * ?")
-    @Scheduled(cron = "0 0/2 * * * ? ")
-    public void updateMessage() {
+    @Scheduled(cron = "0 0/5 * * * ?")
+    public void updateMessage() throws InterruptedException {
         System.out.println("关闭无效连接:" + httpClientProxy.clearInvalidConnection());
-        KookClient kookClient = ServerContext.getBean(KookClient.class);
-        KookProperties kookProperties = ServerContext.getBean(KookProperties.class);
-        if (kookClient == null || kookProperties == null) {
-            return;
-        }
-        try {
-            String url = "https://asia.archeage.com/news?lang=zh_TW";
-            String html = httpClientProxy.doGetForResult(url, Maps.newHashMap());
-            String pattern = "/news/{1}[\\d]+[?]{1}page={1}[\\d]+";
-            Matcher matcher = Pattern.compile(pattern).matcher(html);
+        UpdateInfo updateInfo = new UpdateInfo();
+        updateInfo.get();
+        Thread.sleep(1000 * 60);
+        updateInfo = null;
+        System.gc();
+    }
 
-            List<String> awaitPushUrl = Lists.newArrayList();
-            while (matcher.find()) {
-                awaitPushUrl.add(0, matcher.group());
+    private class UpdateInfo{
+        public void get() {
+            KookClient kookClient = ServerContext.getBean(KookClient.class);
+            KookProperties kookProperties = ServerContext.getBean(KookProperties.class);
+            if (kookClient == null || kookProperties == null) {
+                return;
             }
-            if (SmallTool.isEmpty(lastPushUrl)) {
-                lastPushUrl = awaitPushUrl.get(awaitPushUrl.size() - 1);
-            }
-            int cutoff = 0;
-            for (int i = 0; i < awaitPushUrl.size(); i++) {
-                String s = awaitPushUrl.get(i);
-                if (SmallTool.isEqual(lastPushUrl, s)) {
-                    cutoff = i;
-                    break;
+            try {
+                String url = "https://asia.archeage.com/news?lang=zh_TW";
+                String html = httpClientProxy.doGetForResult(url, Maps.newHashMap());
+                String pattern = "/news/{1}[\\d]+[?]{1}page={1}[\\d]+";
+                Matcher matcher = Pattern.compile(pattern).matcher(html);
+
+                List<String> awaitPushUrl = Lists.newArrayList();
+                while (matcher.find()) {
+                    awaitPushUrl.add(0, matcher.group());
                 }
-            }
-            awaitPushUrl = awaitPushUrl.subList(cutoff + 1, awaitPushUrl.size());
-
-            System.out.println("==========================");
-            System.out.println("上次推送的消息:" + lastPushUrl);
-            for (String s : awaitPushUrl) {
-                System.out.println("等待推送的消息:" + s);
-            }
-            System.out.println("==========================");
-
-            for (String newsUrl : awaitPushUrl) {
-                url = "https://asia.archeage.com" + newsUrl;
-                html = httpClientProxy.doGetForResult(url, Maps.newHashMap());
-                pattern = "<article class=\"view\">{1}[\\d\\D]+</article>{1}";
-                matcher = Pattern.compile(pattern).matcher(html);
-
-                if (matcher.find()) {
-                    html = matcher.group();
-                    HtmlParser htmlParser = new HtmlParserImpl();
-                    htmlParser.loadHtml(html);
-                    ImageRenderer imageRenderer = new ImageRendererImpl(htmlParser);
-                    imageRenderer.saveImage("./1.png");
-
-                    url = kookProperties.getBaseUrl() + kookProperties.getUploadFile();
-                    CloseableHttpClient httpClient = HttpClients.createDefault();
-                    HttpPost httpPost = new HttpPost(url);
-                    httpPost.addHeader("Authorization", "Bot " + kookProperties.getToken());
-
-                    MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-                    builder.addBinaryBody(
-                            "file",
-                            new FileInputStream("./1.png"),
-                            ContentType.MULTIPART_FORM_DATA,
-                            "1.png"
-                    );
-                    HttpEntity multipart = builder.build();
-                    httpPost.setEntity(multipart);
-                    CloseableHttpResponse response = httpClient.execute(httpPost);
-                    HttpEntity responseEntity = response.getEntity();
-                    String jsonString = EntityUtils.toString(responseEntity, "UTF-8");
-                    MapWrap result = JacksonUtil.fromJson(jsonString, MapWrap.class);
-                    String imgUrl = SmallTool.toString(result.get("data.url"), null);
-                    if (SmallTool.notEmpty(imgUrl)) {
-                        kookClient.channelImg("更新", imgUrl);
+                if (SmallTool.isEmpty(lastPushUrl)) {
+                    lastPushUrl = awaitPushUrl.get(awaitPushUrl.size() - 1);
+                }
+                int cutoff = 0;
+                for (int i = 0; i < awaitPushUrl.size(); i++) {
+                    String s = awaitPushUrl.get(i);
+                    if (SmallTool.isEqual(lastPushUrl, s)) {
+                        cutoff = i;
+                        break;
                     }
-                    Thread.sleep(5000);
                 }
-                lastPushUrl = newsUrl;
+                awaitPushUrl = awaitPushUrl.subList(cutoff + 1, awaitPushUrl.size());
+
+                System.out.println("==========================");
+                System.out.println("上次推送的消息:" + lastPushUrl);
+                for (String s : awaitPushUrl) {
+                    System.out.println("等待推送的消息:" + s);
+                }
+                System.out.println("==========================");
+
+                for (String newsUrl : awaitPushUrl) {
+                    url = "https://asia.archeage.com" + newsUrl;
+                    html = httpClientProxy.doGetForResult(url, Maps.newHashMap());
+                    pattern = "<article class=\"view\">{1}[\\d\\D]+</article>{1}";
+                    matcher = Pattern.compile(pattern).matcher(html);
+
+                    if (matcher.find()) {
+                        html = matcher.group();
+                        HtmlParser htmlParser = new HtmlParserImpl();
+                        htmlParser.loadHtml(html);
+                        ImageRenderer imageRenderer = new ImageRendererImpl(htmlParser);
+                        imageRenderer.saveImage("./1.png");
+
+                        url = kookProperties.getBaseUrl() + kookProperties.getUploadFile();
+                        CloseableHttpClient httpClient = HttpClients.createDefault();
+                        HttpPost httpPost = new HttpPost(url);
+                        httpPost.addHeader("Authorization", "Bot " + kookProperties.getToken());
+
+                        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+                        builder.addBinaryBody(
+                                "file",
+                                new FileInputStream("./1.png"),
+                                ContentType.MULTIPART_FORM_DATA,
+                                "1.png"
+                        );
+                        HttpEntity multipart = builder.build();
+                        httpPost.setEntity(multipart);
+                        CloseableHttpResponse response = httpClient.execute(httpPost);
+                        HttpEntity responseEntity = response.getEntity();
+                        String jsonString = EntityUtils.toString(responseEntity, "UTF-8");
+                        MapWrap result = JacksonUtil.fromJson(jsonString, MapWrap.class);
+                        String imgUrl = SmallTool.toString(result.get("data.url"), null);
+                        if (SmallTool.notEmpty(imgUrl)) {
+                            kookClient.channelImg("更新", imgUrl);
+                        }
+                        Thread.sleep(5000);
+                    }
+                    lastPushUrl = newsUrl;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }

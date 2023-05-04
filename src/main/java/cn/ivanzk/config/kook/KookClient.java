@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Configuration
 @ConditionalOnProperty(name = "kook.enable", havingValue = "true")
 public class KookClient {
-    private static HttpClientProxy httpClientProxy = new HttpClientProxy();
+    private static final HttpClientProxy httpClientProxy = new HttpClientProxy();
 
     @Bean
     @ConfigurationProperties(prefix = "kook")
