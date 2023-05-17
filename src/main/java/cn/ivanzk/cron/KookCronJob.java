@@ -89,6 +89,7 @@ public class KookCronJob {
             htmlParser.loadHtml(html);
             imageRenderer = new ImageRendererImpl(htmlParser);
             imageRenderer.saveImage("./1.png");
+            imageRenderer.clearCache();
 
             String imgUrl = KookClient.uploadFile(kookProperties, "./1.png");
             if (SmallTool.notEmpty(imgUrl)) {
