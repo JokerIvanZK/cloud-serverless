@@ -77,7 +77,7 @@ public class DiscordForward implements BasicService {
                     miraiBot.sendMessage(message.getContent());
                 }
                 if (kookClient != null && kookForwardChannelNames.contains(channelName)) {
-                    kookClient.channelMessage(channelName, message.getContent());
+                    kookClient.channelMessage(channelName, message.getContent(), true);
                 }
             });
             gatewayDiscordClient.onDisconnect().block();

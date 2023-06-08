@@ -90,11 +90,6 @@ public class KookCronJob {
 
         for (String newsUrl : awaitPushUrl) {
             url = "https://asia.archeage.com" + newsUrl;
-            kookClient.channelMessage("更新", url);
-        }
-
-        for (String newsUrl : awaitPushUrl) {
-            url = "https://asia.archeage.com" + newsUrl;
             html = httpClientProxy.doGetTryForResult(url, Maps.newHashMap());
             pattern = "<h3>{1}[\\d\\D]+<em class=\"notice-id\">{1}";
             matcher = Pattern.compile(pattern).matcher(html);
@@ -104,7 +99,7 @@ public class KookCronJob {
                 title = title.substring(title.indexOf(">") + 1, title.lastIndexOf("<"));
                 url = title + "\r\n" + url;
             }
-            kookClient.channelMessage("更新", url);
+            kookClient.channelMessage("更新", url, false);
             lastPushUrl = newsUrl;
         }
 

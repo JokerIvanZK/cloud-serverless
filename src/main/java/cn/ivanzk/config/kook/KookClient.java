@@ -75,14 +75,14 @@ public class KookClient {
         }
     };
 
-    public void channelMessage(String channelName, String message) {
+    public void channelMessage(String channelName, String message, boolean isFormat) {
         KookProperties kookProperties = ServerContext.getBean(KookProperties.class);
         if (kookProperties == null) {
             return;
         }
         channelCache.get(null).forEach(channel -> {
             if (channel.getName().contains(channelName) || channel.getName().contains(ZhTwConverterUtil.toTraditional(channelName))) {
-                channelMessage(kookProperties, channel.getId(), formatMessage(message));
+                channelMessage(kookProperties, channel.getId(), isFormat ? formatMessage(message) : message);
             }
         });
     }
