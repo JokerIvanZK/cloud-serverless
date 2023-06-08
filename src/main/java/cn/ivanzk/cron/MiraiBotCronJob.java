@@ -1,7 +1,5 @@
 package cn.ivanzk.cron;
 
-import cn.ivanzk.config.kook.KookClient;
-import cn.ivanzk.config.kook.KookProperties;
 import cn.ivanzk.config.mirai.MiraiBot;
 import com.net.comn.server.ServerContext;
 import org.springframework.beans.factory.annotation.Autowired;
