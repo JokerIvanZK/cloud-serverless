@@ -81,10 +81,11 @@ public class KookCronJob {
             return;
         }
 
-        List<String> imgUrls = Lists.newArrayList();
-        HtmlParser htmlParser;
         ImageRenderer imageRenderer;
-        for (String html : getHtmlString()) {
+        HtmlParser htmlParser;
+        List<String> imgUrls = Lists.newArrayList();
+        List<String> htmlArr = getHtmlString();
+        for (String html : htmlArr) {
             htmlParser = new HtmlParserImpl();
             htmlParser.loadHtml(html);
             imageRenderer = new ImageRendererImpl(htmlParser);
@@ -97,7 +98,7 @@ public class KookCronJob {
             }
             Thread.sleep(5000);
         }
-        kookClient.channelImg("更新", imgUrls.toArray(new String[0]));
+        kookClient.channelImg("更新", imgUrls.toArray(new String[imgUrls.size()]));
         Thread.sleep(1000 * 60);
         System.gc();
     }
