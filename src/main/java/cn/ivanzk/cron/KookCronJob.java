@@ -4,36 +4,14 @@ import cn.ivanzk.config.kook.KookClient;
 import cn.ivanzk.config.kook.KookProperties;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.java.comn.assist.MapWrap;
-import com.java.comn.util.JacksonUtil;
 import com.java.comn.util.SmallTool;
 import com.net.comn.http.HttpClientProxy;
 import com.net.comn.server.ServerContext;
-import gui.ava.html.parser.HtmlParser;
-import gui.ava.html.parser.HtmlParserImpl;
-import gui.ava.html.renderer.ImageRenderer;
-import gui.ava.html.renderer.ImageRendererImpl;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -81,31 +59,6 @@ public class KookCronJob {
             return;
         }
 
-        ImageRenderer imageRenderer;
-        HtmlParser htmlParser;
-        List<String> imgUrls = Lists.newArrayList();
-        List<String> htmlArr = getHtmlString();
-        for (String html : htmlArr) {
-            htmlParser = new HtmlParserImpl();
-            htmlParser.loadHtml(html);
-            imageRenderer = new ImageRendererImpl(htmlParser);
-            imageRenderer.saveImage("./1.png");
-            imageRenderer.clearCache();
-
-            String imgUrl = KookClient.uploadFile(kookProperties, "./1.png");
-            if (SmallTool.notEmpty(imgUrl)) {
-                imgUrls.add(imgUrl);
-            }
-            Thread.sleep(5000);
-        }
-        kookClient.channelImg("更新", imgUrls.toArray(new String[imgUrls.size()]));
-        Thread.sleep(1000 * 60);
-        System.gc();
-    }
-
-    private List<String> getHtmlString() {
-        List<String> list = Lists.newArrayList();
-
         String url = "https://asia.archeage.com/news?lang=zh_TW";
         String html = httpClientProxy.doGetTryForResult(url, Maps.newHashMap());
         String pattern = "/news/{1}[\\d]+[?]{1}page={1}[\\d]+";
@@ -137,16 +90,8 @@ public class KookCronJob {
 
         for (String newsUrl : awaitPushUrl) {
             url = "https://asia.archeage.com" + newsUrl;
-            html = httpClientProxy.doGetTryForResult(url, Maps.newHashMap());
-            pattern = "<article class=\"view\">{1}[\\d\\D]+</article>{1}";
-            matcher = Pattern.compile(pattern).matcher(html);
-
-            if (matcher.find()) {
-                html = matcher.group();
-                list.add(html);
-            }
-            lastPushUrl = newsUrl;
+            kookClient.channelMessage("更新", url);
         }
-        return list;
+
     }
 }
