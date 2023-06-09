@@ -2,10 +2,8 @@ package cn.ivanzk.cron;
 
 import cn.ivanzk.config.kook.KookClient;
 import cn.ivanzk.config.kook.KookProperties;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import cn.ivanzk.util.HtmlParseUtil;
 import com.java.comn.util.SmallTool;
-import com.net.comn.http.HttpClientProxy;
 import com.net.comn.server.ServerContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -13,8 +11,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Mirai机器人定时任务
@@ -24,7 +20,6 @@ import java.util.regex.Pattern;
 @Component
 @ConditionalOnBean(KookClient.class)
 public class KookCronJob {
-    private static final HttpClientProxy httpClientProxy = new HttpClientProxy();
     @Value("${lastPushUrl}")
     private String lastPushUrl = null;
 
@@ -52,56 +47,28 @@ public class KookCronJob {
      */
     @Scheduled(cron = "0 0/5 * * * ?")
     public void updateMessage() {
-        System.out.println("关闭无效连接:" + httpClientProxy.clearInvalidConnection());
         KookClient kookClient = ServerContext.getBean(KookClient.class);
         KookProperties kookProperties = ServerContext.getBean(KookProperties.class);
         if (kookClient == null || kookProperties == null) {
             return;
         }
 
-        String url = "https://asia.archeage.com/news?lang=zh_TW";
-        String html = httpClientProxy.doGetTryForResult(url, Maps.newHashMap());
-        String pattern = "/news/{1}[\\d]+[?]{1}page={1}[\\d]+";
-        Matcher matcher = Pattern.compile(pattern).matcher(html);
-
-        List<String> awaitPushUrl = Lists.newArrayList();
-        while (matcher.find()) {
-            awaitPushUrl.add(0, matcher.group());
-        }
+        List<String> awaitPushUrl = HtmlParseUtil.doGetForRegexStringList("https://asia.archeage.com/news?lang=zh_TW", "/news/{1}[\\d]+[?]{1}page={1}[\\d]+");
         if (SmallTool.isEmpty(lastPushUrl)) {
             lastPushUrl = awaitPushUrl.get(awaitPushUrl.size() - 1);
         }
-        int cutoff = 0;
-        for (int i = 0; i < awaitPushUrl.size(); i++) {
-            String s = awaitPushUrl.get(i);
-            if (SmallTool.isEqual(lastPushUrl, s)) {
-                cutoff = i;
-                break;
-            }
-        }
-        awaitPushUrl = awaitPushUrl.subList(cutoff + 1, awaitPushUrl.size());
-
-        System.out.println("==========================");
-        System.out.println("上次推送的消息:" + lastPushUrl);
-        for (String s : awaitPushUrl) {
-            System.out.println("等待推送的消息:" + s);
-        }
-        System.out.println("==========================");
+        awaitPushUrl = awaitPushUrl.subList(awaitPushUrl.indexOf(lastPushUrl) + 1, awaitPushUrl.size());
 
         for (String newsUrl : awaitPushUrl) {
-            url = "https://asia.archeage.com" + newsUrl;
-            html = httpClientProxy.doGetTryForResult(url, Maps.newHashMap());
-            pattern = "<h3>{1}[\\d\\D]+<em class=\"notice-id\">{1}";
-            matcher = Pattern.compile(pattern).matcher(html);
+            String url = "https://asia.archeage.com" + newsUrl;
+            String title = HtmlParseUtil.doGetForRegexString(url, "<h3>{1}[\\d\\D]+<em class=\"notice-id\">{1}");
 
-            if (matcher.find()) {
-                String title = matcher.group();
+            if (SmallTool.notEmpty(title)) {
                 title = title.substring(title.indexOf(">") + 1, title.lastIndexOf("<"));
                 url = title + "\r\n" + url;
             }
             kookClient.channelMessage("更新", url, false);
             lastPushUrl = newsUrl;
         }
-
     }
 }
