@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  * 处理html的工具类
  */
 public class HtmlParseUtil {
-    private static HttpClientProxy httpClientProxy = new HttpClientProxy();
+    private static final HttpClientProxy httpClientProxy = new HttpClientProxy();
 
     public static String doGetForRegexString(String url, String pattern) {
         System.out.println("关闭无效连接:" + httpClientProxy.clearInvalidConnection());
