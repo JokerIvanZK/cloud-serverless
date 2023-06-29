@@ -10,16 +10,11 @@ import com.java.comn.util.JacksonUtil;
 import com.java.comn.util.SmallTool;
 import com.net.comn.http.HttpClientProxy;
 import com.net.comn.server.ServerContext;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.util.EntityUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -140,25 +135,6 @@ public class KookClient {
         body.put("content", buildCardMessage(title, imgUrl));
         httpClientProxy.doPostJsonTryForResult(url, body, header);
         httpClientProxy.clearInvalidConnection();
-    }
-
-    public static String uploadFile(KookProperties kookProperties, String filePath) {
-        String url = kookProperties.getBaseUrl() + kookProperties.getUploadFile();
-        String jsonString = null;
-        try {
-            jsonString = httpClientProxy.doHttpPost(url, (httpClient, httpPost) -> {
-                httpPost.addHeader("Authorization", "Bot " + kookProperties.getToken());
-                httpPost.setEntity(MultipartEntityBuilder.create().addBinaryBody("file", new File(filePath)).build());
-                CloseableHttpResponse response = httpClient.execute(httpPost);
-                HttpEntity responseEntity = response.getEntity();
-                return EntityUtils.toString(responseEntity, "UTF-8");
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        httpClientProxy.clearInvalidConnection();
-        MapWrap result = JacksonUtil.fromJson(jsonString, MapWrap.class);
-        return result != null ? result.get("data.url", String.class) : null;
     }
 
     public static List<Guild> guildList() {
