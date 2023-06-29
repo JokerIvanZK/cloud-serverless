@@ -2,7 +2,7 @@
 
 identifyname="cn.ivanzk.BootApplication"
 basePath=$(cd $(dirname $0); pwd);
-javaOpts="-Xms2g -Xmx2g -Xmn1g -Xss256k -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=256m"
+javaOpts="-Xms256m -Xmx256m -Xmn128m -Xss256k -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=128m"
 javaOpts="${javaOpts} -Djava.rmi.server.hostname=127.0.0.1"
 javaOpts="${javaOpts} -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=${basePath}/oom.hprof"
 javaOpts="${javaOpts} -XX:SurvivorRatio=6 -XX:MaxTenuringThreshold=5 -XX:PretenureSizeThreshold=0 -XX:LargePageSizeInBytes=128m -XX:CMSInitiatingOccupancyFraction=92"
