@@ -1,4 +1,4 @@
-set "javaOpts="-Xms2g -Xmx2g -Xmn1g -Xss256k -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=256m""
+set "javaOpts=-Xms2g -Xmx2g -Xmn1g -Xss256k -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=256m"
 set "javaOpts=%javaOpts% -Dmirai.no-desktop"
 set "javaOpts=%javaOpts% -Djava.rmi.server.hostname=127.0.0.1"
 set "javaOpts=%javaOpts% -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=%cd%/oom"
