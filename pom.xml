@@ -54,13 +54,6 @@
             <artifactId>httpclient</artifactId>
         </dependency>
         <dependency>
-            <groupId>cn.ivanzk</groupId>
-            <artifactId>bot</artifactId>
-            <version>1.0</version>
-            <systemPath>${project.basedir}/src/main/lib/integrate-nimble5-1.0.0.jar</systemPath>
-            <scope>system</scope>
-        </dependency>
-        <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
             <version>1.2</version>
@@ -89,9 +82,16 @@
             <version>1.8.0</version>
         </dependency>
         <dependency>
+            <groupId>cn.ivanzk</groupId>
+            <artifactId>integrate-nimble</artifactId>
+            <version>5-1.0.0</version>
+            <systemPath>${project.basedir}/src/main/lib/integrate-nimble5-1.0.0.jar</systemPath>
+            <scope>system</scope>
+        </dependency>
+        <dependency>
             <groupId>net.mamoe</groupId>
             <artifactId>mirai-core-all</artifactId>
-            <version>2.14.0</version>
+            <version>2.15.0-M1</version>
             <systemPath>${project.basedir}/src/main/lib/mirai-core-all-2.15.0-M1-all.jar</systemPath>
             <scope>system</scope>
         </dependency>
@@ -113,6 +113,47 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>cn.ivanzk.BootApplication</mainClass>
+                    <layout>ZIP</layout>
+                    <includes>
+                        <include>
+                            <groupId>nothing</groupId>
+                            <artifactId>nothing</artifactId>
+                        </include>
+                    </includes>
+                </configuration>
+                <!--一个jar包-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>repackage</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+            </plugin>
+            <!--设置将 lib 拷贝到应用 jar 外面-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 
