@@ -15,6 +15,6 @@ fi
 rm -rf ${basePath}/logs
 
 #新启动服务
-nohup java -jar ${identifyname} &
+nohup java -jar ${basePath}/${identifyname} > ${basePath}/nohup.log 2>&1 &
 echo "service ["$identifyname"] started."
 ps -ef|grep ${identifyname}

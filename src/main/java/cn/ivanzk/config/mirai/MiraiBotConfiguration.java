@@ -32,6 +32,7 @@ public class MiraiBotConfiguration {
     @ConditionalOnBean(MiraiBotProperties.class)
     public BotConfiguration botConfiguration(MiraiBotProperties miraiBotProperties) throws FileNotFoundException {
         String classpath = ResourceUtils.getURL("classpath:").getPath();
+        System.out.println(classpath);
         BotConfiguration botConfiguration = new BotConfiguration() {{
             noNetworkLog();
             setCacheDir(new File(classpath + "/cache"));
