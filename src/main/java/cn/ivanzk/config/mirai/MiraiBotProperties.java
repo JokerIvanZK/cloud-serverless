@@ -11,7 +11,6 @@ public class MiraiBotProperties {
     private Long admin;
     private Long[] friends;
     private Long[] groups;
-    private String deviceInfoPath = "device.json";
     private BotConfiguration.MiraiProtocol protocol = BotConfiguration.MiraiProtocol.ANDROID_WATCH;
 
     public Long getQq() {
@@ -52,14 +51,6 @@ public class MiraiBotProperties {
 
     public void setGroups(Long[] groups) {
         this.groups = groups;
-    }
-
-    public String getDeviceInfoPath() {
-        return this.deviceInfoPath;
-    }
-
-    public void setDeviceInfoPath(String deviceInfoPath) {
-        this.deviceInfoPath = deviceInfoPath;
     }
 
     public BotConfiguration.MiraiProtocol getProtocol() {
