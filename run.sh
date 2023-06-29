@@ -11,10 +11,14 @@ then
 	echo "stop old service ["$identifyname"] pid:" $pid
 fi
 
+#进入目录
+cd ${basePath}
+
 #删除日志目录
-rm -rf ${basePath}/logs
+rm -rf logs
+rm -rf nohup.log
 
 #新启动服务
-nohup java -jar ${basePath}/${identifyname} > ${basePath}/nohup.log 2>&1 &
+nohup java -jar ${identifyname} > nohup.log 2>&1 &
 echo "service ["$identifyname"] started."
 ps -ef|grep ${identifyname}

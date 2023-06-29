@@ -3,4 +3,4 @@ spring:
     active: prod
 logging:
   file:
-    name: classpath:/logs/info.log
+    name: ./logs/info.log

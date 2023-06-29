@@ -9,7 +9,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,12 +30,10 @@ public class MiraiBotConfiguration {
     @Bean
     @ConditionalOnBean(MiraiBotProperties.class)
     public BotConfiguration botConfiguration(MiraiBotProperties miraiBotProperties) throws FileNotFoundException {
-        String classpath = ResourceUtils.getURL("classpath:").getPath();
-        System.out.println(classpath);
         BotConfiguration botConfiguration = new BotConfiguration() {{
             noNetworkLog();
-            setCacheDir(new File(classpath + "/cache"));
-            fileBasedDeviceInfo(classpath + "/device.json");
+            setCacheDir(new File("./cache"));
+            fileBasedDeviceInfo("./device.json");
             setProtocol(miraiBotProperties.getProtocol());
             autoReconnectOnForceOffline();
         }};
