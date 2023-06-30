@@ -5,7 +5,45 @@ MiraiBot-QQ机器人、discord机器人、kook机器人、定时任务、httpCli
 
 ## 导出maven依赖
 ```
-    mvn dependency:copy-dependencies -DoutputDirectory=D:\lib
+mvn dependency:copy-dependencies -DoutputDirectory=D:\lib
+```
+
+## 给sh脚本添加权限
+```shell
+chmod -R 777 run.sh
+```
+
+## 添加定时任务
+在最后一行加上定时任务的配置 `/etc/crontab` `每三天的17:30执行一次`
+```
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=root
+
+# For details see man 4 crontabs
+
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name  command to be executed
+  30  17  */3  *  * root  /home/cloud-serverless/run.sh
+```
+## 修改crontab的配置后需要重启crontab，使配置生效
+```shell
+# 保存任务
+crontab /etc/crontab
+# 查看任务
+crontab -l
+# 其他命令
+systemctl start crond
+systemctl stop crond
+systemctl restart crond
+systemctl reload crond
+systemctl status crond
 ```
 
 ## 许可证
