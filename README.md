@@ -14,7 +14,7 @@ chmod -R 777 run.sh
 ```
 
 ## 添加定时任务
-在最后一行加上定时任务的配置 `/etc/crontab` `每三天的17:30执行一次`
+在最后一行加上定时任务的配置 `/etc/crontab` `每三天的17:30执行一次` `最后需要空一行`
 ```
 SHELL=/bin/bash
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
@@ -31,6 +31,7 @@ MAILTO=root
 # |  |  |  |  |
 # *  *  *  *  * user-name  command to be executed
   30  17  */3  *  * root  /home/cloud-serverless/run.sh
+
 ```
 ## 修改crontab的配置后需要重启crontab，使配置生效
 ```shell
