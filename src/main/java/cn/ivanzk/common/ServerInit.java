@@ -2,6 +2,7 @@ package cn.ivanzk.common;
 
 import cn.ivanzk.server.BasicService;
 import com.java.comn.util.SmallTool;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -18,8 +19,9 @@ public class ServerInit implements ApplicationListener<ContextRefreshedEvent> {
     private List<BasicService> serverList;
 
     @Override
-    public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
+    public void onApplicationEvent(@NotNull ContextRefreshedEvent contextRefreshedEvent) {
         init();
+        ControlCenter.initCrontabHandler();
     }
 
     private void init() {

@@ -35,6 +35,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- 定时任务 Quartz -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-quartz</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
