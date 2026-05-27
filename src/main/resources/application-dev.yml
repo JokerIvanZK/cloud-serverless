@@ -1,37 +1,46 @@
 server:
   port: 9000
 
-service:
-  discord-forward-mirai: false
-  discord-forward-kook: false
-  mirai-forward-channel-names: 更新
-  kook-forward-channel-names: 债券,admin测试
-
-discord:
-  enable: false
-  token:
-
-kook:
-  enable: false
-  token:
-  admin:
-  base-url: https://www.kookapp.cn/
-  guild-list: /api/v3/guild/list
-  guild-view: /api/v3/guild/view
-  channel-list: /api/v3/channel/list
-  channel-view: /api/v3/channel/view
-  channel-message: /api/v3/channel/message
-  upload-file: /api/v3/asset/create
-  direct-message: /api/v3/direct-message/create
-
-mirai:
-  enable: false
-  admin:
-  qq:
-  password:
-  friends:
-  groups:
-  #  protocol: ANDROID_PHONE ANDROID_PAD ANDROID_WATCH IPAD MACOS
-  protocol: MACOS
-
-lastPushUrl: /news/4740?page=1
+cloud-serverless:
+  bots:
+    discord:
+      enabled: false
+      token:
+    kook:
+      enabled: false
+      token:
+      admin:
+      base-url: https://www.kookapp.cn/
+      endpoints:
+        guild-list: /api/v3/guild/list
+        channel-list: /api/v3/channel/list
+        channel-message: /api/v3/channel/message
+        direct-message: /api/v3/direct-message/create
+    mirai:
+      enabled: false
+      qq:
+      admin:
+      friends: []
+      groups: []
+      # ANDROID_PHONE, ANDROID_PAD, ANDROID_WATCH, IPAD, MACOS
+      protocol: MACOS
+  forwarding:
+    discord-to-mirai:
+      enabled: false
+      channel-names:
+        - 更新
+    discord-to-kook:
+      enabled: false
+      channel-names:
+        - 债券
+        - admin测试
+  news:
+    archeage:
+      enabled: false
+      base-url: https://asia.archeage.com
+      list-path: /news?lang=zh_TW
+      last-push-url: /news/4740?page=1
+      target-channel: 更新
+  schedule:
+    heartbeat-cron: "0 0 17 * * ?"
+    news-cron: "0 0/5 * * * ?"

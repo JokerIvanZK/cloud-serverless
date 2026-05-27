@@ -7,3 +7,4 @@
 /src/main/resources/application-prod.yml
 /*.iml
 /device.json
+.DS_Store

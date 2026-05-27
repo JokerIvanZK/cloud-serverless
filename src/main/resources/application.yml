@@ -1,6 +1,9 @@
 spring:
+  application:
+    name: cloud-serverless
   profiles:
-    active: prod
+    active: dev
+
 logging:
   file:
     name: ./logs/info.log
